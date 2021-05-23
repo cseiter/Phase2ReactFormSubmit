@@ -5,6 +5,24 @@ function Form() {
   const [lastName, setLastName] = useState("Henry");
   const [submittedData, setSubmittedData] = useState([]);
 
+  // add state for holding error messages
+const [errors, setErrors] = useState([]);
+
+function handleSubmit(event) {
+  event.preventDefault();
+  // first name is required
+  if (firstName) {
+    const formData = { firstName: firstName, lastName: lastName };
+    const dataArray = [...submittedData, formData];
+    setSubmittedData(dataArray);
+    setFirstName("");
+    setLastName("");
+    setErrors([]);
+  } else {
+    setErrors(["First name is required!"]);
+  }
+} 
+
   function handleFirstNameChange(event) {
     setFirstName(event.target.value);
   }
@@ -37,10 +55,18 @@ function Form() {
         <input type="text" onChange={handleLastNameChange} value={lastName} />
         <button type="submit">Submit</button>
       </form>
+      {/* conditionally render error messages */}
+      {errors.length > 0
+        ? errors.map((error, index) => (
+            <p key={index} style={{ color: "red" }}>
+              {error}
+            </p>
+          ))
+        : null}
       <h3>Submissions</h3>
       {listOfSubmissions}
     </div>
-  );
+  ); 
 }
 
 export default Form;
